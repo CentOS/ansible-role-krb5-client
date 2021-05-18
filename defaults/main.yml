@@ -1,1 +1,36 @@
 # Defaults variables for role krb5-client
+
+# Default realm going to libdefaults
+krb5_default_realm: EXAMPLE.COM
+krb5_dns_lookup: True
+
+# Assuming we want to distribute CA certs for pkinit_anchors (if we point to it for some realms above)
+# Let's use a list for this (default is empty, nothing is needed)
+# These CA certificates would be distributed from {{ pkistore }} (like for other roles)
+# example:
+# krb5_pkinit_anchors_ca_list:
+#   - my-ca.crt
+#   - other-ca.crt
+krb5_pkinit_anchors_ca_list: []
+
+# Do we want to include specific [realms] section in krb5.conf (default is no)
+krb5_define_realms: False
+# If true we can just inject snippet like this:
+krb5_realms: |
+  EXAMPLE.COM = {
+      kdc = kerberos.example.com
+      admin_server = kerberos.example.com
+  }
+  OTHEREXAMPLE.COM = {
+      kdc = kerberos.otherexample.com
+      admin_server = kerberos.example.com
+  }
+
+# Do we want to include specific [domain_realm] section in krb5.conf (default is no)
+krb5_define_domain_realm: False
+# If true we can just inject snippet like this:
+krb5_domain_realm: |
+  .example.com = EXAMPLE.COM
+  example.com = EXAMPLE.COM
+
+  

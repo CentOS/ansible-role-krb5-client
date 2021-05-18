@@ -1,0 +1,36 @@
+# This krb5.conf is now managed by Ansible
+# Don't edit and contact infra team for local mods !
+
+includedir /etc/krb5.conf.d/
+
+[logging]
+    default = FILE:/var/log/krb5libs.log
+    kdc = FILE:/var/log/krb5kdc.log
+    admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+    default_realm = {{ krb5_default_realm }}
+{% if krb5_dns_lookup %}
+    dns_lookup_realm = true
+    dns_lookup_kdc = true
+{% else %}
+    dns_lookup_realm = false
+{% endif %}
+    ticket_lifetime = 24h
+    renew_lifetime = 7d
+    forwardable = true
+    udp_preference_limit = 0
+    rdns = false
+    dns_canonicalize_hostname = true
+    default_ccache_name = KEYRING:persistent:%{uid}
+
+{% if krb5_define_realms %}
+[realms]
+{{ krb5_realms }}
+{% endif %}
+
+{% if krb5_define_domain_realm %}
+[domain_realm]
+{{ krb5_domain_realm }}
+{% endif %}
+
