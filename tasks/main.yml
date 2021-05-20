@@ -15,7 +15,7 @@
 
 - name: Distribute needed CA certs for pkinit_anchors (if defined)
   copy:
-    src: "{{ filestore }}/{{ item }}"
+    src: "{{ pkistore }}/{{ item }}"
     dest: "/etc/pki/tls/certs/{{ item }}"
   with_items: "{{ krb5_pkinit_anchors_ca_list }}"
 
